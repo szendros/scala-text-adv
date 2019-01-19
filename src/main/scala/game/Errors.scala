@@ -3,6 +3,7 @@ package game
 trait Error {
   val msg: String
 }
+case class GeneralError(msg: String) extends Error
 
 case class ParseError(msg: String) extends Error
 case class CommandError(msg: String) extends Error

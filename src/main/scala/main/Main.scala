@@ -13,15 +13,17 @@ object Main extends App {
   def change[A](fn: Scene => (Scene, Either[Object, A])) =
     EitherT(State[Scene, Either[Object, A]](x => fn(x)))
           
-  val scene = GameData(buildScene(Nappali(), Leltar()), NappaliID)
+  val game = GameData(buildScene(Nappali(), Leltar()), NappaliID, Running)
 
   //val commandText = "tedd a kulcsot az asztalra";
-  val commandText = "vedd fel a kulcsot";
+  //val commandText = "vedd fel a kulcsot";
   //val commandText = "észak"
   
-  val state = CommandOps.processCommand(commandText, scene)
+  //val state = CommandOps.processCommand(commandText, game)  
+  //val r = state.value.run(game).value  
+  //println(r) 
   
-  println(state.value.run(scene).value) 
+  GameRunner.gameLoop(game).unsafeRunSync()
 }
 
 

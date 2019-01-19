@@ -3,7 +3,7 @@ package game.subjects
 import game._
 import game.Subject
 import cats.implicits._
-import game.MutationOps._
+//import game.MutationOps._
 
 case object DobozID extends SubjectID
 
@@ -22,7 +22,7 @@ case class Doboz(
   override def handleMutation(mutation: Mutation, data: GameData) =
     mutation match {    
        case RemoveMutation(_, KulcsID) =>
-        Result(this.copy(items - KulcsID), mut(RelocateMutation(Some(AblakID))))        
+        Result(this.copy(items - KulcsID))       
       case _ => Result(this.copy())
     }
 }

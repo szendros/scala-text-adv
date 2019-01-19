@@ -1,6 +1,5 @@
-package main
+package game
 
-import game._
 import MutationOps._
 import SceneOps._
 
@@ -8,8 +7,6 @@ import cats.implicits._
 import cats.kernel.Monoid
 import cats.data.EitherT
 import cats.data._
-
-//import State._
 
 object CommandOps {
 
@@ -42,19 +39,13 @@ object CommandOps {
           val newState = data.copy(data.scene ++ (res map { x => x.item.id -> x.item }).toMap)
           val cmdRes = res.foldLeft(Monoid[WithError[MutationResult]].empty)((acc, item) =>
             Monoid[WithError[MutationResult]].combine(acc, item.result))
-          (newState, Right(cmdRes))
+          (newState, cmdRes)
         }
       }
       //process all mutations
-      mutRes <- change { s =>
-        {
-          cmdRes match {
-            case Right(x) => {
-              val res = processMutations(s, x.messages, x.mutations)
-              (res.item, Right(res.result))
-            }
-            case Left(x) => (s, Left(x))
-          }                   
+      mutRes <- change { s => {       
+              val res = processMutations(s, cmdRes.messages, cmdRes.mutations)
+              (res.item, Right(res.result))                            
         }
       }
     } yield mutRes

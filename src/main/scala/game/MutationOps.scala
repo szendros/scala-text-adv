@@ -13,9 +13,12 @@ object MutationOps {
           case RelocateMutation(Some(x)) => x
           case _                         => data.currentLocation
         }
+        val gameState = head match {
+          case GameOverMutation(None) => Finished
+          case _                         => data.state
+        }
         val newState = data.copy(
-          scene = data.scene ++ (res map { x => x.item.id -> x.item }).toMap,
-          currentLocation = currLoc)
+          scene = data.scene ++ (res map { x => x.item.id -> x.item }).toMap, currentLocation = currLoc, state = gameState)
         val newRes = res.foldLeft(Monoid[WithError[MutationResult]].empty) { (acc, item) =>
           Monoid[WithError[MutationResult]].combine(acc, item.result)
         }
