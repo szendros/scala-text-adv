@@ -3,7 +3,7 @@ package game.subjects
 import game._
 import game.Subject
 import cats.implicits._
-import game.MutationOps._
+import game.Mutation._
 
 case object NappaliID extends SubjectID
 

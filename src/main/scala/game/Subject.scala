@@ -2,14 +2,14 @@ package game
 
 import cats.implicits._
 
-trait SubjectID {
+sealed trait SubjectID {
 }
 
 case class SubjectInfo(
   adjective: Option[String],
   noun:      String)
   
-trait Subject {
+sealed trait Subject {
 
   val items: Set[SubjectID]
 
@@ -25,5 +25,5 @@ trait Subject {
     Result(this)
 
   def handleMutation(mutation: Mutation, data: GameData): Result[Subject, Either[Error, MutationResult]] =
-    Result(this)          
+    Result(this)        
 }

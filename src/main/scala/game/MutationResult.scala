@@ -3,18 +3,17 @@ package game
 import cats.kernel.Monoid
 
 case class MutationResult(
-  messages:  List[String],
-  mutations: List[Mutation]
+  messages:  List[String] = List(),
+  mutations: List[Mutation] = List(),
+  currentLocation: Option[SubjectID] = None,
+  state: Option[GameState] = None
   )
 
 object MutationResult {
 
-  def apply(messages: List[String]) = new MutationResult(messages, List())
-  def apply() = new MutationResult(List(), List())
-  
   implicit val monoid = new Monoid[MutationResult] {
     def combine(a: MutationResult, b: MutationResult) =
-      MutationResult(a.messages ++ b.messages, a.mutations ++ b.mutations)
+      MutationResult(a.messages ++ b.messages, a.mutations ++ b.mutations, b.currentLocation.orElse(a.currentLocation), b.state.orElse(a.state))
 
     def empty = MutationResult(List(), List())
   }

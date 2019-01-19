@@ -5,43 +5,22 @@ import cats.implicits._
 
 object MutationOps {
 
-  def processMutations(game: GameData, messages: List[String], mutations: List[Mutation]): Result[GameData, WithError[MutationResult]] = {
-    mutations match {
+  def processMutations(game: GameData, mutationResults: MutationResult): Result[GameData, WithError[MutationResult]] = {
+    mutationResults.mutations match {
       case head :: tail => {
         val res = (game.scene filterKeys { x => x == head.subject.getOrElse(x) }) map { _._2.handleMutation(head, game) }
-        val currLoc = head match {
-          case RelocateMutation(Some(x)) => x
-          case _                         => game.currentLocation
-        }
-        val gameState = head match {
-          case GameOverMutation(None) => Finished
-          case _                         => game.state
-        }
         val newState = game.copy(
-          scene = game.scene ++ (res map { x => x.item.id -> x.item }).toMap, currentLocation = currLoc, state = gameState)
+          scene = game.scene ++ (res map { x => x.item.id -> x.item }).toMap)
         val newRes = res.foldLeft(Monoid[WithError[MutationResult]].empty) { (acc, item) =>
           Monoid[WithError[MutationResult]].combine(acc, item.result)
         }
         newRes match {
           case Right(x) =>
-            processMutations(newState, messages ++ x.messages, tail ++ x.mutations)
-          case Left(x) => Result(game, Left(x))       
+            processMutations(newState, x.copy(messages = x.messages, mutations = tail ++ x.mutations))
+          case Left(x) => Result(game, Left(x))
         }
       }
-      case Nil => Result(game, Right(MutationResult(messages, List())))
+      case Nil => Result(game, Right(mutationResults.copy(mutations = Nil)))
     }
-  }
-  
-   def msg(message: String) =
-    Right(MutationResult(List(message), List()))
-  
-  def mut(mutation: Mutation) =
-    Right(MutationResult(List(), List(mutation)))
- 
-  def mut(message: String, mutation: Mutation) =
-    Right(MutationResult(List(message), List(mutation)))
-    
-  def mut(message: String, mutation: Mutation*) =
-    Right(MutationResult(List(message), mutation.toList))
-  
+  }  
 }

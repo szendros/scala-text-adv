@@ -2,7 +2,7 @@ package game.subjects
 
 import game._
 import cats.implicits._
-import game.MutationOps._
+import game.Mutation._
 
 case object AsztalID extends SubjectID
 
@@ -19,8 +19,8 @@ case class Asztal(
     cmd.action match {
       case Some("tedd") if cmd.subjectIDs.contains(KulcsID) => Result(
         this.copy(eltolva = true, items = items + KulcsID),
-        mut("Leteszed a kulcsot az asztalra.", RemoveMutation(None, KulcsID)))
-      case Some("told") => Result(this.copy(eltolva = true), mut("Sikeresen eltoltad az asztalt.", TestMutation(Some(AblakID))))
+        msg("Leteszed a kulcsot az asztalra.") |+| mut(RemoveMutation(None, KulcsID)))                
+      case Some("told") => Result(this.copy(eltolva = true), msg("Sikeresen eltoltad az asztalt.") |+| mut(TestMutation(Some(AblakID))))
       case _            => Result(this)
     }
 
