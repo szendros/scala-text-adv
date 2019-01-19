@@ -19,6 +19,8 @@ case class Kulcs(
         Result(this, msg("Egy kis kulcs, nincs rajta semmi jel."))
       case Some("vedd") => Result(this, mut("Felvetted a kulcsot.", 
           RemoveMutation(None, id), AddMutation(Some(LeltarID), KulcsID)))
+      case Some("tedd") => Result(this, mut("Leteszed a kulcsot a földre.", 
+          RemoveMutation(Some(LeltarID), id), AddMutation(Some(data.currentLocation), KulcsID)))          
       case _            => Result(this)
     }
 }
