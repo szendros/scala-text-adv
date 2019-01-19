@@ -18,20 +18,17 @@ case class Nappali(
 
   override def handleCommand(cmd: Command, data: GameData) =
     cmd.action match {
-      case Some("nézd") =>
-        Result(this, msg(description))
-      case Some("é") =>
-        Result(this, Left(MutationError("Nem tudsz északra menni.")))
-      case _ => Result(this.copy())
+      case Some("nézd") => Result(this, msg(description))
+      case Some("é")    => Result(this, Left(MutationError("Nem tudsz északra menni.")))
+      case _            => Result(this.copy())
     }
 
   override def handleMutation(mutation: Mutation, data: GameData) =
     mutation match {
-      case AddMutation(_, x) =>
-        Result(this.copy(items + x))
-      case RemoveMutation(_, x) =>
-        Result(this.copy(items - x))
-      case _ => Result(this.copy())
+      case AddMutation(id, KulcsID) => Result(this, Left(MutationError("Itt nem tudod letenni.")))
+      case AddMutation(_, x)        => Result(this.copy(items + x))
+      case RemoveMutation(_, x)     => Result(this.copy(items - x))
+      case _                        => Result(this)
     }
 
   val description = "A nappaliban vagy, a szobában áll egy asztal és a szekrény"

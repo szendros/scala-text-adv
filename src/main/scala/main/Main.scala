@@ -4,7 +4,7 @@ import game._
 import cats.data.EitherT
 import cats.data._
 import game.subjects._
-import game.SceneOps._
+import game.SubjectOps._
 
 //import State._
 
@@ -15,9 +15,9 @@ object Main extends App {
           
   val game = GameData(buildScene(Nappali(), Leltar()), NappaliID, Running)
 
-  val commandText = "tedd a kulcsot az asztalra";
+  //val commandText = "tedd a kulcsot az asztalra";
   //val commandText = "vedd fel a kulcsot";
-  //val commandText = "észak"
+  val commandText = "észak"
   
   val state = CommandOps.processCommand(commandText, game)  
   val r = state.value.run(game).value  

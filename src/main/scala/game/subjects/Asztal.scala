@@ -19,17 +19,16 @@ case class Asztal(
     cmd.action match {
       case Some("tedd") if cmd.subjectIDs.contains(KulcsID) => Result(
         this.copy(eltolva = true, items = items + KulcsID),
-        mut("Ráteszed a kulcsot az asztalra.", RemoveMutation(None, KulcsID)))
-      case Some("told") =>
-        Result(this.copy(eltolva = true), mut("Sikeresen eltoltad az asztalt.", TestMutation(Some(AblakID))))
-      case _ => Result(this)
+        mut("Leteszed a kulcsot az asztalra.", RemoveMutation(None, KulcsID)))
+      case Some("told") => Result(this.copy(eltolva = true), mut("Sikeresen eltoltad az asztalt.", TestMutation(Some(AblakID))))
+      case _            => Result(this)
     }
 
   override def handleMutation(mutation: Mutation, data: GameData) =
     mutation match {
-      case _: TestMutation =>
-        Result(this.copy(eltolva = true), msg("Az asztal el lett tolva."))
-      case _ => Result(this)
+      case AddMutation(_, x)    => Result(this.copy(items + x))
+      case RemoveMutation(_, x) => Result(this.copy(items - x))
+      case _                    => Result(this)
     }
 }
 

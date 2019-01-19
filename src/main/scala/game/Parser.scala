@@ -4,7 +4,6 @@ import cats.implicits._
 import game.words._
 import cats.Monoid
 import monocle.macros._
-import util.Utils._
 
 object Parser {
 
@@ -37,7 +36,7 @@ object Parser {
     else if (Actions.conjunctives.contains(word)) Right(parseConjunctive(word, parsed))     
     else Nouns.nouns.get(word).flatMap(x => Some(Right(parseNoun(x, parsed))))
       .orElse(Adjectives.adjectives.get(word).flatMap(x => Some(Right(parseAdjective(x, parsed)))))
-      .getOrElse(Left(ParseError(word)))
+      .getOrElse(Left(ParseError(s"Nem tudom mit jelent, hogy $word.")))
       
   def parseVerb(word: String, parsed: ParsedCommand) = verbLens.set(Some(word))(parsed)
 

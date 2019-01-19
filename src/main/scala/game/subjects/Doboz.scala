@@ -8,25 +8,24 @@ import cats.implicits._
 case object DobozID extends SubjectID
 
 case class Doboz(
-  items:   Set[SubjectID],
+  items:    Set[SubjectID],
   kinyitva: Boolean) extends Subject {
 
   val id = DobozID
-  val info = SubjectInfo(None, "doboz")  
-  
-  override def build() = List(Kulcs())  
-  
-  override val visibleItems =
-    items filter (_ => kinyitva)
-  
+  val info = SubjectInfo(None, "doboz")
+
+  override def build() = List(Kulcs())
+
+  override val visibleItems = items filter (_ => kinyitva)
+
   override def handleMutation(mutation: Mutation, data: GameData) =
-    mutation match {    
-       case RemoveMutation(_, KulcsID) =>
-        Result(this.copy(items - KulcsID))       
-      case _ => Result(this.copy())
+    mutation match {
+      case AddMutation(_, x)    => Result(this.copy(items + x))
+      case RemoveMutation(_, x) => Result(this.copy(items - x))
+      case _                    => Result(this)
     }
 }
 
 object Doboz {
-  def apply() = new Doboz(Set(KulcsID), kinyitva = true)
+  def apply() = new Doboz(Set(KulcsID), kinyitva = false)
 }

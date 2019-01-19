@@ -1,7 +1,7 @@
 package game
 
 import MutationOps._
-import SceneOps._
+import SubjectOps._
 
 import cats.implicits._
 import cats.kernel.Monoid
@@ -16,16 +16,13 @@ object CommandOps {
   def getCommandWithIds(cmd: Command, s: GameData) = {
     val availableSubjects = getAvailableSubjects(s.currentLocation, s.scene)
     (s, cmd.subjectInfos.toList.traverse { info =>
-      findSubject(info, availableSubjects, s.scene) match {
-        case Some(x) => Right(x)
-        case None    => Left(TooManySubjectsError(info.noun))
-      }
+      findSubject(info, availableSubjects, s.scene) 
     } map { x => Command(cmd.action, Set(), x.toSet) })
   }
 
-  def handleCommand(cmd: Command, s: GameData) = {
+  def handleCommand(cmd: Command, availableSubjects: Set[SubjectID], s: GameData) = {    
     val res = (s.scene filter (x => (
-      cmd.subjectIDs.contains(x._1)))) map { _._2.handleCommand(cmd, s) }
+      if (cmd.subjectIDs.isEmpty) availableSubjects else cmd.subjectIDs).contains(x._1))).map { _._2.handleCommand(cmd, s) }
     val newState = s.copy(s.scene ++ (res map { x => x.item.id -> x.item }).toMap)
     val cmdRes = res.foldLeft(Monoid[WithError[MutationResult]].empty)((acc, item) =>
       Monoid[WithError[MutationResult]].combine(acc, item.result))
@@ -37,9 +34,9 @@ object CommandOps {
       cmdParsed <- change { (_, Parser.parse(commandText)) }      
       availableSubjects <- change { s => (s, Right(getAvailableSubjects(data.currentLocation, s.scene))) }
       cmdWithIds <- change { s => getCommandWithIds(cmdParsed, s) }
-      cmdRes <- change { s => handleCommand(cmdWithIds, s) }      
+      cmdRes <- change { s => handleCommand(cmdWithIds, availableSubjects, s) }      
       mutRes <- change { s =>
-        {
+        {          
           val res = processMutations(s, cmdRes.messages, cmdRes.mutations)
           (res.item, res.result)
         }
