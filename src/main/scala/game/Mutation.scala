@@ -1,6 +1,6 @@
 package game
 
-trait Mutation {
+sealed trait Mutation {
   val subject : Option[SubjectID]
 }
 

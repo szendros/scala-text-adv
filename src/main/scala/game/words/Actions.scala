@@ -18,6 +18,12 @@ object Actions {
       Alias("told","told el", "mozgasd")
       )
         
+  def unhandleActionMessage(action: String) =     
+    action match {
+    case "é" | "k" | "d" | "ny" => "Nem tudsz abba az irányba menni."
+    case _ => "Nem tudom hogyan kellene csinálni."
+  }
+     
   def getKey = (x: String) => 
     x.split(" ") match {
       case Array(a, b) => ActionKey(Some(a),Some(b))

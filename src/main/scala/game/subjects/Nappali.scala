@@ -23,15 +23,16 @@ case class Nappali(
       case _            => Result(this.copy())
     }
 
-  override def handleMutation(mutation: Mutation, data: GameData) =
-    mutation match {
-      case AddMutation(id, KulcsID) => Result(this, Left(MutationError("Itt nem tudod letenni.")))
+  override def handleMutation(mutation: Mutation, data: GameData) = {   
+    mutation match {      
+      case RelocateMutation(id)     => Result(this, msg(description))
+      //case AddMutation(id, KulcsID) => Result(this, Left(MutationError("Itt nem tudod letenni.")))
       case AddMutation(_, x)        => Result(this.copy(items + x))
       case RemoveMutation(_, x)     => Result(this.copy(items - x))
       case _                        => Result(this)
     }
-
-  val description = "A nappaliban vagy, a szobában áll egy asztal és a szekrény"
+  }
+  val description = "A nappaliban vagy, a szobában áll egy asztal és a szekrény."
 }
 
 object Nappali {

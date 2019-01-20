@@ -1,6 +1,6 @@
 package game
 
-trait Error {
+sealed trait Error {
   val msg: String
 }
 case class GeneralError(msg: String) extends Error

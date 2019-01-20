@@ -2,14 +2,14 @@ package game
 
 import cats.implicits._
 
-sealed trait SubjectID {
+trait SubjectID {
 }
 
 case class SubjectInfo(
   adjective: Option[String],
   noun:      String)
   
-sealed trait Subject {
+trait Subject {
 
   val items: Set[SubjectID]
 

@@ -15,7 +15,7 @@ case class Kulcs(
 
   override def handleCommand(cmd: Command, data: GameData) =
     cmd.action match {
-      case Some("nézd") => Result(this, msg("Egy kis kulcs, nincs rajta semmi jel."))
+      case Some("nézd") if cmd.hasOnly(id) => Result(this, msg("Egy kis kulcs, nincs rajta semmi jel."))
       case Some("vedd") => Result(this, msg("Felvetted a kulcsot.") |+| mut(RemoveMutation(None, id), AddMutation(Some(LeltarID), KulcsID)))
       case Some("tedd") if cmd.hasOnly(id) => Result(this, msg("Leteszed a kulcsot a földre.") |+| mut(RemoveMutation(Some(LeltarID), id), AddMutation(Some(data.currentLocation), KulcsID)))
       case _ => Result(this)
