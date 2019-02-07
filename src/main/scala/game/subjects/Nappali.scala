@@ -12,27 +12,35 @@ case class Nappali(
   lampa: Boolean) extends Subject {
 
   val id = NappaliID
-  val info = SubjectInfo(None, "szoba")
+  val info = SubjectInfo(None, "szoba") 
+  
+  override val build = {
+    
+    List(Asztal(), Ablak())
+  }
+  
+  def asztal(game: GameData) : Asztal = game.get(AsztalID)
 
-  override def build() = List(Asztal(), Ablak())
-
-  override def handleCommand(cmd: Command, data: GameData) =
+  override def handleCommand(cmd: Command, game: GameData) =
     cmd.action match {
-      case Some("nézd") => Result(this, msg(description))
+      case Some("nézd") => Result(this, msg(description(game): _*))
       case Some("é")    => Result(this, Left(MutationError("Nem tudsz északra menni.")))
       case _            => Result(this.copy())
     }
 
   override def handleMutation(mutation: Mutation, data: GameData) = {   
     mutation match {      
-      case RelocateMutation(id)     => Result(this, msg(description))
+      case RelocateMutation(id)     => Result(this, msg(description(data): _*))
       //case AddMutation(id, KulcsID) => Result(this, Left(MutationError("Itt nem tudod letenni.")))
       case AddMutation(_, x)        => Result(this.copy(items + x))
       case RemoveMutation(_, x)     => Result(this.copy(items - x))
       case _                        => Result(this)
     }
   }
-  val description = "A nappaliban vagy, a szobában áll egy asztal és a szekrény."
+       
+  def description(game: GameData) = 
+    "A nappaliban vagy, a szobában áll egy asztal és a szekrény." :: Nil ++ 
+    cond(asztal(game).eltolva, "Az asztal el van tolva.")    
 }
 
 object Nappali {

@@ -8,7 +8,7 @@ import game.SubjectOps._
 
 object Main extends App {
       
-  val game = GameData(buildScene(Nappali(), Leltar()), NappaliID, Running)
+  val game = GameData(buildScene(Nappali(), Avatar()), NappaliID, Running)
 
   //val commandText = "tedd a kulcsot az asztalra";
   //val commandText = "vedd fel a kulcsot";

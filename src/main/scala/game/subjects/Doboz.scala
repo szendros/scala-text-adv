@@ -14,7 +14,7 @@ case class Doboz(
   val id = DobozID
   val info = SubjectInfo(None, "doboz")
 
-  override def build() = List(Kulcs())
+  override val build = List(Kulcs())
 
   override val visibleItems = items filter (_ => kinyitva)
 

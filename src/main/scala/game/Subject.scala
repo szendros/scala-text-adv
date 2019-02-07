@@ -19,7 +19,7 @@ trait Subject {
 
   def visibleItems: Set[SubjectID] = items
 
-  def build(): List[Subject] = List() 
+  val build: List[Subject] = List() 
   
   def handleCommand(cmd: Command, data: GameData): Result[Subject, Either[Error, MutationResult]] =
     Result(this)

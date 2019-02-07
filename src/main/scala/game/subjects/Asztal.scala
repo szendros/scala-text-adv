@@ -13,13 +13,13 @@ case class Asztal(
   val id = AsztalID
   val info = SubjectInfo(Some("kis"), "asztal")
 
-  override def build() = List(Doboz())
+  override val build = List(Doboz())
 
   override def handleCommand(cmd: Command, data: GameData) =
     cmd.action match {
       case Some("tedd") if cmd.subjectIDs.contains(KulcsID) => Result(
         this.copy(eltolva = true, items = items + KulcsID),
-        msg("Leteszed a kulcsot az asztalra.") |+| mut(RemoveMutation(None, KulcsID)))                
+        msg("Leteszed a kulcsot az asztalra.") |+| mut(RemoveMutation(None, KulcsID)))
       case Some("told") => Result(this.copy(eltolva = true), msg("Sikeresen eltoltad az asztalt.") |+| mut(TestMutation(Some(AblakID))))
       case _            => Result(this)
     }

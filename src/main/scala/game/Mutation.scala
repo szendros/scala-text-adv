@@ -9,6 +9,7 @@ case class RemoveMutation(subject: Option[SubjectID], target: SubjectID) extends
 case class AddMutation(subject: Option[SubjectID], target: SubjectID) extends Mutation
 case class RelocateMutation(subject: Option[SubjectID]) extends Mutation
 case class GameOverMutation(subject: Option[SubjectID]) extends Mutation
+case class EventMutation(subject: Option[SubjectID]) extends Mutation
 
 object Mutation {
   

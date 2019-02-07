@@ -22,7 +22,6 @@ object GameRunner {
   def gameLoop(game: GameData): IO[GameData] = {
 
     for {
-      processed <- IO(processInitialCommand(game).value.run(game).value)
       input <- IO { readln }
       processed <- IO(processCommand(input, game).value.run(game).value)
       _ <- processed match {

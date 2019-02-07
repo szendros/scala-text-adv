@@ -7,8 +7,7 @@ import cats.implicits._
 import cats.kernel.Monoid
 import cats.data.EitherT
 import cats.data._
-import game.subjects.LeltarID
-import game.subjects.NappaliID
+import game.subjects._
 import game.words.Actions._
 
 object CommandOps {
@@ -44,12 +43,13 @@ object CommandOps {
   def processCommand(commandText: String, data: GameData) =
     for {      
       cmdParsed <- change { (_, Parser.parse(commandText)) }      
-      availableSubjects <- change { s => (s,  Right(getAvailableSubjects(s.scene, data.currentLocation, LeltarID))) }
+      availableSubjects <- change { s => (s,  Right(getAvailableSubjects(s.scene, data.currentLocation, AvatarID))) }
       cmdWithIds <- change { s => getCommandWithIds(cmdParsed, availableSubjects, s) }
       cmdRes <- change { s => handleCommand(cmdWithIds, availableSubjects, s) }      
+      eventRes <- change {  s => (s, Right(cmdRes.copy(mutations = cmdRes.mutations ++ List(EventMutation(None))))) }
       mutRes <- change { s =>
-        {                          
-          val res = processMutations(s, MutationResult(cmdRes.messages, cmdRes.mutations))
+        {                                    
+          val res = processMutations(s, MutationResult(eventRes.messages, eventRes.mutations))
           val newState = saveMutationInState(res.item, res.result)          
           (newState, res.result)
         }

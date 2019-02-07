@@ -7,5 +7,9 @@ case object Finished extends GameState
 case class GameData (
   scene: Scene,
   currentLocation: SubjectID,
-  state: GameState
-)
+  state: GameState,
+) {
+  
+  def get[A](id: SubjectID) = 
+    scene.get(id).get.asInstanceOf[A]               
+}
