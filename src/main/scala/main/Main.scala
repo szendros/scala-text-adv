@@ -1,8 +1,9 @@
 package main
-
-import game._
 import game.subjects._
-import game.SubjectOps._
+import game.operations.SubjectOps._
+import game.engine.Running
+import game.engine.GameData
+import game.engine.GameRunner
 
 //import State._
 

@@ -1,9 +1,10 @@
 package game.subjects
 
-import game._
-import game.Subject
-import game.Mutation._
 import cats.implicits._
+
+import game.cond
+import game.engine._
+import game.engine.Mutation._
 
 object AblakID extends SubjectID
 
@@ -16,7 +17,7 @@ case class Ablak(
 
   override def handleCommand(cmd: Command, data: GameData) =
     cmd.action match {
-      case Some("nézd") if cmd.hasOnly(id) => Result(this, msg(description(data): _*))
+      case Some("nézd") => Result(this, msg(description(data): _*))
       case _                               => Result(this)
     }
 

@@ -1,6 +1,7 @@
-package game
+package game.engine
 
 import cats.implicits._
+import game.Error
 
 trait SubjectID {
 }

@@ -1,7 +1,12 @@
-package game
+package game.operations
 
 import cats.implicits._
+import scala.Left
+import scala.Right
 import scala.annotation.tailrec
+
+import game.WithError
+import game.engine._
 
 object MutationOps {
 

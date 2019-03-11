@@ -1,6 +1,6 @@
-package game
+package game.engine
 
-import cats.kernel.Monoid
+import cats._
 
 case class MutationResult(
   messages:  List[String] = List(),

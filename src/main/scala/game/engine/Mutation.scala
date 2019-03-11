@@ -1,4 +1,8 @@
-package game
+package game.engine
+
+import scala.Right
+
+import game.WithError
 
 sealed trait Mutation {
   val subject : Option[SubjectID]

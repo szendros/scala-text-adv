@@ -12,13 +12,15 @@ object Actions {
       Alias("k", "kelet", "keletre"),      
       Alias("le", "menj le", "mássz le"),
       Alias("mássz"),
-      Alias("nézd","nézd meg", "vizsgáld", "vizsgáld meg"),
+      Alias("nézd","n","nézd meg", "vizsgáld", "vizsgáld meg"),
       Alias("vedd","vedd fel"),
       Alias("tedd","tedd le","dobd el","dobd le"),
-      Alias("told","told el", "mozgasd")
+      Alias("told","told el", "mozgasd"),
+      Alias("nyisd","nyisd ki", "tárd", "tárd ki"),
+      Alias("leltár","l"),
       )
         
-  def unhandleActionMessage(action: String) =     
+  def unhandledActionMessage(action: String) =     
     action match {
     case "é" | "k" | "d" | "ny" => "Nem tudsz abba az irányba menni."
     case _ => "Nem tudom hogyan kellene csinálni."

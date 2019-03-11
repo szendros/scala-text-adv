@@ -1,9 +1,14 @@
-package game
+package game.engine
 
+import cats._
 import cats.implicits._
-import game.words._
-import cats.Monoid
+import scala.Right
 import monocle.macros._
+
+import game._
+import game.words._
+import game.ParseError
+import game.Error
 
 object Parser {
 

@@ -1,9 +1,10 @@
 package game.subjects
 
-import game._
-import game.Subject
+
 import cats.implicits._
-import game.Mutation._
+
+import game.engine._
+import game.engine.Mutation._
 
 case object DobozID extends SubjectID
 
@@ -18,14 +19,21 @@ case class Doboz(
 
   override val visibleItems = items filter (_ => kinyitva)
 
+  override def handleCommand(cmd: Command, data: GameData) =
+    cmd.action match {
+      case Some("nyisd") => Result(
+        this.copy(kinyitva = true), msg("Kinyitod a szekrényt."))     
+      case _ => Result(this)
+    }
+
   override def handleMutation(mutation: Mutation, data: GameData) =
     mutation match {
       case AddMutation(_, x)    => Result(this.copy(items + x))
-      case RemoveMutation(_, x) => Result(this.copy(items - x), msg("alma") |+| state(Finished))
+      case RemoveMutation(_, x) => Result(this.copy(items - x))
       case _                    => Result(this)
     }
 }
 
 object Doboz {
-  def apply() = new Doboz(Set(KulcsID), kinyitva = true)
+  def apply() = new Doboz(Set(KulcsID), kinyitva = false)
 }

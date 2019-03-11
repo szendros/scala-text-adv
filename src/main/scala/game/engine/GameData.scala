@@ -1,4 +1,6 @@
-package game
+package game.engine
+
+import game._
 
 trait GameState
 case object Running extends GameState
@@ -8,8 +10,7 @@ case class GameData (
   scene: Scene,
   currentLocation: SubjectID,
   state: GameState,
-) {
-  
+) { 
   def get[A](id: SubjectID) = 
     scene.get(id).get.asInstanceOf[A]               
 }

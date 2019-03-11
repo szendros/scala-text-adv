@@ -1,34 +1,40 @@
-package game
-
-import MutationOps._
-import SubjectOps._
+package game.operations
 
 import cats.implicits._
-import cats.kernel.Monoid
 import cats.data.EitherT
 import cats.data._
+import cats.kernel.Monoid
+import scala.Left
+import scala.Right
+
+import game.WithError
+import game.engine._
+import game.operations.MutationOps._
+import game.operations.SubjectOps._
 import game.subjects._
 import game.words.Actions._
+import game.Error
+import game.CommandError
 
 object CommandOps {
 
   def change[A](fn: GameData => (GameData, Either[Error, A])) =
     EitherT(State[GameData, Either[Error, A]](x => fn(x)))
 
-  def getCommandWithIds(cmd: Command, availableSubjects: Set[SubjectID], s: GameData) = {    
+  def getCommandWithIds(cmd: Command, availableSubjects: Set[SubjectID], s: GameData) = {           
     (s, cmd.subjectInfos.toList.traverse { info =>
       findSubject(info, availableSubjects, s.scene) 
     } map { x => Command(cmd.action, Set(), x.toSet) })
   }  
-  
+    
   def handleCommand(cmd: Command, availableSubjects: Set[SubjectID], s: GameData) = {    
     val res = (s.scene filter (x => (
-      if (cmd.subjectIDs.isEmpty) availableSubjects else cmd.subjectIDs).contains(x._1))).map { _._2.handleCommand(cmd, s) }        
+        cmd.subjectIDs ++ Set(AvatarID, s.currentLocation)).contains(x._1))).map { _._2.handleCommand(cmd, s) }        
     val cmdRes = res.foldLeft(Monoid[WithError[MutationResult]].empty)((acc, item) =>
       Monoid[WithError[MutationResult]].combine(acc, item.result))        
     val newState = saveMutationInState(s.copy(s.scene ++ (res map { x => x.item.id -> x.item }).toMap), cmdRes)       
     (newState, cmdRes match {
-      case Right(x) if x.messages.isEmpty => Left(CommandError(unhandleActionMessage(cmd.action.getOrElse("")))) 
+      case Right(x) if x.messages.isEmpty => Left(CommandError(unhandledActionMessage(cmd.action.getOrElse("")))) 
       case x => x
     })
     

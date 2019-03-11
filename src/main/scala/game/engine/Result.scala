@@ -1,4 +1,4 @@
-package game
+package game.engine
 
 import cats.kernel.Monoid
 

@@ -1,9 +1,9 @@
-package game
+package game.engine
 
-//import cats.implicits._
-import game.CommandOps._
+import cats.effect._
 
-import cats.effect.IO
+import game.operations.CommandOps._
+import game.Error
 
 object GameRunner {
 

@@ -1,3 +1,4 @@
+import game.engine._
 
 package object game {
   

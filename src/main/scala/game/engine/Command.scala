@@ -1,4 +1,4 @@
-package game
+package game.engine
 
 case class Command(
   action:       Option[String],
@@ -11,4 +11,7 @@ case class Command(
   def hasOnly(id: SubjectID) =
     subjectIDs.contains(id) && subjectIDs.size == 1
 
+  def hasNoSubject() = 
+    subjectIDs.isEmpty
+    
 }
