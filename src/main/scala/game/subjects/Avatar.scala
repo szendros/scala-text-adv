@@ -8,7 +8,8 @@ import game.engine.Mutation._
 case object AvatarID extends SubjectID
 
 case class Avatar(
-  items: Set[SubjectID]) extends Subject {
+  items: Set[SubjectID],
+  inventory: Set[SubjectID]) extends Subject {
 
   val id = AvatarID
   val info = SubjectInfo(None, "")
@@ -21,8 +22,8 @@ case class Avatar(
   
   override def handleMutation(mutation: Mutation, data: GameData) =
     mutation match {
-      case AddMutation(_, x)    => Result(this.copy(items + x))
-      case RemoveMutation(_, x) => Result(this.copy(items - x))
+      case AddMutation(_, x)    => Result(this.copy(inventory + x))
+      case RemoveMutation(_, x) => Result(this.copy(inventory - x))
       case _                    => Result(this)
     }
   
@@ -33,5 +34,5 @@ case class Avatar(
 }
 
 object Avatar {
-  def apply() = new Avatar(Set())
+  def apply() = new Avatar(Set(), Set())
 }

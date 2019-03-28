@@ -8,7 +8,7 @@ import game.engine.Mutation._
 case object SzekrenyID extends SubjectID
 
 case class Szekreny(
-  items:    Set[SubjectID],
+  items:    Set[SubjectID],  
   kinyitva: Boolean,
   eltolva:  Boolean) extends Subject {
 
@@ -16,6 +16,8 @@ case class Szekreny(
   val info = SubjectInfo(Some("kis"), "szekrény")
 
   override val build = List(Doboz())
+  
+  override val visibleItems = items
 
   override def handleCommand(cmd: Command, game: GameData) =
     cmd.action match {
@@ -32,7 +34,7 @@ case class Szekreny(
       case AddMutation(_, x)    => Result(this.copy(items + x))
       case RemoveMutation(_, x) => Result(this.copy(items - x))
       case _                    => Result(this)
-    }
+    }   
 
   def description(game: GameData) : Seq[String] = {
     if (!kinyitva) return "A szekrény zárva van." :: Nil

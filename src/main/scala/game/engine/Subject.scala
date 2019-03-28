@@ -12,8 +12,8 @@ case class SubjectInfo(
   
 trait Subject {
 
-  val items: Set[SubjectID]
-
+  val items: Set[SubjectID]  
+ 
   val id: SubjectID
   
   val info: SubjectInfo

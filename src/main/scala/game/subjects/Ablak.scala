@@ -9,7 +9,7 @@ import game.engine.Mutation._
 object AblakID extends SubjectID
 
 case class Ablak(
-  items:  Set[SubjectID],
+  items:  Set[SubjectID], 
   nyitva: Boolean) extends Subject {
 
   val id = AblakID

@@ -10,6 +10,7 @@ object Nouns {
       Alias("ablak","ablakot"),
       Alias("asztal","asztalt","asztalra"),
       Alias("kulcs","kulcsot","kulccsal"),
+      Alias("doboz","dobozt"),
       )      
   
   def getMap(x:Alias) : Map[String, String] =
